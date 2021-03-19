@@ -79,7 +79,7 @@ yHat = output[0]*data2[2,:] + output[1] # predicted violent incidents
 residuals2 = y - yHat # compute residuals
 
 # 4. Correlate the residuals:
-part_corr = np.corrcoef(residuals1,residuals2) # r = -0.09
+part_corr = np.corrcoef(residuals1,residuals2) # r = -0.034
 
 #%%
 # You now realize that brain mass is a good predictor of intelligence. 
@@ -98,45 +98,65 @@ rsqr = model.score(X,Y)
 predict = model.predict([[3000]])
  # prediction: someone with a brain mass of 3000g,
  # will tend to have 125 of IQ
-
-
 #%%
 # Concerns have arisen that suggest that the society on this planet discriminates 
 # against members of the lower castes when it comes to income. You look for evidence 
 # for this and find that the correlation between income and caste membership is
 correlationOfCaste_Income = np.corrcoef(caste,income)
 # .387
-
-
 #%%
 # However, contrarians argue that this correlation is spurious and that it is not due 
 # to caste membership per se. To investigate this claim, you correlate caste membership 
 # and income while controlling for intelligence and hours worked and find that it is closest to
 
+X = np.transpose([IQ,hoursWorked]) # IQ, hours worked, years education
+Y = caste # income
+regr = linear_model.LinearRegression() # linearRegression function from linear_model
+regr.fit(X,Y) # use fit method 
+rSqr = regr.score(X,Y) # 0.48 - realistic - life is quite idiosyncratic
+betas = regr.coef_ # m
+yInt = regr.intercept_  # b
+y_hat = betas[0]*IQ + betas[1]*hoursWorked + yInt
+residuals1 = Y - y_hat
 
+X = np.transpose([IQ,hoursWorked]) # IQ, hours worked, years education
+Y = income# income
+regr = linear_model.LinearRegression() # linearRegression function from linear_model
+regr.fit(X,Y) # use fit method 
+rSqr = regr.score(X,Y) # 0.48 - realistic - life is quite idiosyncratic
+betas = regr.coef_ # m
+yInt = regr.intercept_  # b
+y_hat = betas[0]*IQ + betas[1]*hoursWorked + yInt
+residuals2 = Y - y_hat
 
-inputData = np.transpose([IQ,hoursWorked]) #brain mass and caste
-output = simple_linear_regress_func(inputData) # output returns m,b,r^2
-y = caste # caste membership
-yHat = output[0]*IQ + output[1] # predicted income
-residuals1 = y - yHat # compute residuals
-
-inputData = np.transpose([IQ,hoursWorked]) #brain mass and caste
-output = simple_linear_regress_func(inputData) # output returns m,b,r^2
-y = income # IQ
-yHat = output[0]*IQ + output[1] # predicted violent incidents
-residuals2 = y - yHat # compute residuals
-
-# 4. Correlate the residuals:
-part_corr = np.corrcoef(residuals1,residuals2)
+part_corr_caste_income_IQandHoursWorked = np.corrcoef(residuals1,residuals2)
+# got -0.014, closer to zero so no correlation.
 #%%
 # What proportion of the variance in income does intelligence account for?
-
+inputData = np.transpose([IQ,income])
+output = simple_linear_regress_func(inputData)
+variance_income_IQ = output[2]
+# got 0.161515 as r^2
 #%%
 # What proportion of the variance in income do hours worked account for?
-
+inputData = np.transpose([hoursWorked,income])
+output = simple_linear_regress_func(inputData)
+variance_income_HoursWorked = output[2]
+# got 0.161515 as r^2
 #%%
 # What proportion of the variance in income if accounted for by intelligence and "hours worked" together?
-
+X = np.transpose([IQ,hoursWorked]) # IQ, hours worked, years education
+Y = income# income
+regr = linear_model.LinearRegression() # linearRegression function from linear_model
+regr.fit(X,Y) # use fit method 
+rSqrIncome = regr.score(X,Y) # 0.48 - realistic - life is quite idiosyncratic
+# the proportion of the varience is 0.7283
 #%%
 # What income (in credits) would we predict for someone with an alien IQ of 120 who is working 50 hours a week?
+X = np.transpose([IQ,hoursWorked]) # IQ, hours worked, years education
+Y = income# income
+regr = linear_model.LinearRegression() # linearRegression function from linear_model
+regr.fit(X,Y) # use fit method 
+rSqr = regr.score(X,Y) # 0.48 - realistic - life is quite idiosyncratic
+predictIncome = regr.predict([[120,50]])
+# 884.11 of income 
