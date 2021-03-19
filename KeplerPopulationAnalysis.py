@@ -13,12 +13,20 @@ Created on Thu Mar 18 22:29:19 2021
 # 4) Hours worked per week
 # 5) Annual income (in credits)
 
-# loading data and libraries:
+# loading data, libraries and usefull functions:
 import numpy as np
 import pandas as pd 
 import matplotlib.pyplot as plt 
 from sklearn import linear_model 
-keplerData = np.genfromtxt('/Users/aragaom/Desktop/NYU Classes/Intro to Data Science Class/Lab5/kepler.txt')
+keplerData = np.genfromtxt('/Users/aragaom/Desktop/KeplerPopulationAnalysis/kepler.txt')
+
+caste = np.array(keplerData[:,0])
+IQ = np.array(keplerData[:,1])
+brainMass = np.array(keplerData[:,2])
+hoursWorked = np.array(keplerData[:,3])
+income = np.array(keplerData[:,4])
+
+
 def simple_linear_regress_func(data):
     # Load numpy:
     import numpy as np
@@ -82,21 +90,22 @@ output = simple_linear_regress_func(inputData) #this correspondes to the R^2
 #%%
 # When predicting intelligence from brain mass, what intelligence score would 
 # you expect given a brain mass of 3000 g?
-prediction = np.array([3000]).reshape(1,-1)
-data3 = np.array([keplerData[:,1],keplerData[:,2]])
-inputData = np.transpose([data3[0,:],data3[1,:]])
-#regr = linear_model.LinearRegression() # linearRegression function from linear_model
-regr.fit(data3[1,:],data3[0,:])
-X = np.array(data3[1,:]).reshape(-1,1)
-regr.predict(X)
-regr.predict([[3000]])
+X = np.array(keplerData[:,2]).reshape((-1,1))
+Y = np.array(keplerData[:,1])
+model = linear_model.LinearRegression() 
+model.fit(X,Y)
+rsqr = model.score(X,Y)
+predict = model.predict([[3000]])
+ # prediction: someone with a brain mass of 3000g,
+ # will tend to have 125 of IQ
 
 
 #%%
 # Concerns have arisen that suggest that the society on this planet discriminates 
 # against members of the lower castes when it comes to income. You look for evidence 
 # for this and find that the correlation between income and caste membership is
-
+correlationOfCaste_Income = np.corrcoef(caste,income)
+# .387
 
 
 #%%
@@ -104,6 +113,22 @@ regr.predict([[3000]])
 # to caste membership per se. To investigate this claim, you correlate caste membership 
 # and income while controlling for intelligence and hours worked and find that it is closest to
 
+
+
+inputData = np.transpose([IQ,hoursWorked]) #brain mass and caste
+output = simple_linear_regress_func(inputData) # output returns m,b,r^2
+y = caste # caste membership
+yHat = output[0]*IQ + output[1] # predicted income
+residuals1 = y - yHat # compute residuals
+
+inputData = np.transpose([IQ,hoursWorked]) #brain mass and caste
+output = simple_linear_regress_func(inputData) # output returns m,b,r^2
+y = income # IQ
+yHat = output[0]*IQ + output[1] # predicted violent incidents
+residuals2 = y - yHat # compute residuals
+
+# 4. Correlate the residuals:
+part_corr = np.corrcoef(residuals1,residuals2)
 #%%
 # What proportion of the variance in income does intelligence account for?
 
