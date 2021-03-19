@@ -76,10 +76,21 @@ part_corr = np.corrcoef(residuals1,residuals2) # r = -0.09
 #%%
 # You now realize that brain mass is a good predictor of intelligence. 
 # What proportion of the variance in intelligence does brain mass account for?
-
+data3 = np.array([keplerData[:,1],keplerData[:,2]])
+inputData = np.transpose([data2[2,:],data2[1,:]])
+output = simple_linear_regress_func(inputData) #this correspondes to the R^2
 #%%
 # When predicting intelligence from brain mass, what intelligence score would 
 # you expect given a brain mass of 3000 g?
+prediction = np.array([3000]).reshape(1,-1)
+data3 = np.array([keplerData[:,1],keplerData[:,2]])
+inputData = np.transpose([data3[0,:],data3[1,:]])
+#regr = linear_model.LinearRegression() # linearRegression function from linear_model
+regr.fit(data3[1,:],data3[0,:])
+X = np.array(data3[1,:]).reshape(-1,1)
+regr.predict(X)
+regr.predict([[3000]])
+
 
 #%%
 # Concerns have arisen that suggest that the society on this planet discriminates 
