@@ -34,7 +34,7 @@ data2 = pickle.load(datafile) # Load 'datafile' -> store as 'data2'
 #%% 2) Simple linear regression between IQ and income
 
 # 0. Load:
-data = np.genfromtxt('/Users/aragaom/Desktop/Lab5/iqIncome.csv',delimiter=',') # Column 1 = IQ, 2 = income
+data = np.genfromtxt('/Users/aragaom/Desktop/NYU Classes/Intro to Data Science Class/Lab5/iqIncome.csv',delimiter=',') # Column 1 = IQ, 2 = income
 
 # 1. Descriptives:
 D1 = np.mean(data,axis=0) # take mean of each column
@@ -113,7 +113,7 @@ def simple_linear_regress_func(data):
 # Predicting income from IQ, hours worked and years formal education
 import numpy as np
 # 0. Load:
-data = np.genfromtxt('/Users/aragaom/Desktop/Lab5/determinedIncome.csv',delimiter=',') # IQ, hours worked, years education, income
+data = np.genfromtxt('/Users/aragaom/Desktop/NYU Classes/Intro to Data Science Class/Lab5/determinedIncome.csv',delimiter=',') # IQ, hours worked, years education, income
 
 # 1. Desriptives:
 D1 = np.mean(data,axis=0) # take mean of each column

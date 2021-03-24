@@ -118,18 +118,27 @@ betas = regr.coef_ # m
 yInt = regr.intercept_  # b
 y_hat = betas[0]*IQ + betas[1]*hoursWorked + yInt
 residuals1 = Y - y_hat
+plt.plot(y_hat, caste,'o',markersize=.75) # y_hat, income
+plt.xlabel('Prediction from model') 
+plt.ylabel('Actual caste')  
+plt.title('R^2: {:.3f}'.format(rSqr)) 
 
 X = np.transpose([IQ,hoursWorked]) # IQ, hours worked, years education
 Y = income# income
 regr = linear_model.LinearRegression() # linearRegression function from linear_model
 regr.fit(X,Y) # use fit method 
-rSqr = regr.score(X,Y) # 0.48 - realistic - life is quite idiosyncratic
+rSqr2 = regr.score(X,Y) # 0.48 - realistic - life is quite idiosyncratic
 betas = regr.coef_ # m
 yInt = regr.intercept_  # b
-y_hat = betas[0]*IQ + betas[1]*hoursWorked + yInt
-residuals2 = Y - y_hat
-
+y_hat2 = betas[0]*IQ + betas[1]*hoursWorked + yInt
+residuals2 = Y - y_hat2
+plt.plot(y_hat2, income,'o',markersize=.75) # y_hat, income
+plt.xlabel('Prediction from model') 
+plt.ylabel('Actual income')  
+plt.title('R^2: {:.3f}'.format(rSqr2)) 
 part_corr_caste_income_IQandHoursWorked = np.corrcoef(residuals1,residuals2)
+
+plt.plot(residuals2, residuals1,'o',markersize=.75) # y_hat, income
 # got -0.014, closer to zero so no correlation.
 #%%
 # What proportion of the variance in income does intelligence account for?
